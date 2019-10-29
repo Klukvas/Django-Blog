@@ -1,0 +1,77 @@
+{% extends 'blog/main.html' %}
+{% block main_section %}
+    <h2>All posts from {{ view.kwargs.username }}</h2>
+    <h4>Count: {{ page_obj.paginator.count }}</h4>
+{% for post in news %}
+    <div class="alert alert-light">
+            <h1>{{ post.title }}</h1>
+            <p>{{ post.text|striptags|truncatechars:200}}</p>
+        <div class="row">
+            <div >
+                <img {% if post.autor.profile.img.url %}
+                        src="{{ post.autor.profile.img.url }}"
+                     {% else %}
+                        src="/pictures/default.jpg"
+                     {% endif %}
+                        alt="{{ post.autor }}" class="user_image">
+            </div>
+            <div class="mt-2">
+                  <span class="text-muted">Publicate: {{ post.date|date:'d E Y  H:i:s' }}</span>
+            {% if post.autor  %}
+                <p><b>Autor:  <a href="{% url 'user-news' post.autor %}">{{ post.autor }}</a></b></p>
+            {% else %}
+                <p><b>Autor:  <mark>Admin</mark></b></p>
+            {% endif %}
+            </div>
+        </div>
+        <a href="{% url 'news-datail' post.id %}" class="btn btn-outline-warning">Читать далее</a>
+    </div>
+{% endfor %}
+{% if is_paginated %}
+    {% if page_obj.has_previous %}
+        <a href="?page=1" class="btn btn-outline-warning">Начало</a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn
+            btn-outline-warning">Предыдущая</a>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}
+            <button class="btn btn-warning">{{ num }}</button>
+        {% elif  num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}" class="btn btn-outline-warning">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-warning">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-warning">Последняя</a>
+        {% endif %}
+{% endif %}
+{% endblock main_section %}
+
+
+{% block new_section %}
+   <h3><b>Бредогенератор: создаем тексты на любом языке с помощью нейронной сети</b></h3>
+            <img src="https://habrastorage.org/webt/vc/cy/we/vccywe4c6r0vbryvvx3qiale_j8.jpeg" class="img-thumbnail mb-1">
+            <p>Эта статья будет в немного «пятничном» формате, сегодня мы займемся NLP. Не
+                тем NLP, про который продают книжки в подземных переходах, а тем, который
+                Natural Language Processing — обработка естественных языков. В качестве примера
+                такой обработки будет использоваться генерация текста с помощью нейронной сети.
+                Создавать тексты мы сможем на любом языке, от русского или английского, до С++.
+                Результаты получаются весьма интересными, по картинке уже наверно можно
+                догадаться.
+            </p>
+            <a href="https://habr.com/ru/post/470035/" target="_blank">
+                <button class="btn btn-warning">See</button>
+            </a>
+
+            <h3><b>Двойной VPN в один клик. Как легко разделить IP-адрес точки входа и выхода</b></h3>
+            <img src="https://habrastorage.org/webt/gu/ux/_r/guux_rw3bw9b6_0h617yyow4xrq.png" class="img-thumbnail mb-1">
+            <p>В статье описывается самый простой способ настроить VPN-сервер, у
+                которого IP-адрес для подключения VPN-клиентов отличается от IP-адреса,
+                с которого клиенты выходят в интернет.
+            </p>
+            <a href="https://habr.com/ru/company/vdsina/blog/469879/" target="_blank">
+                <button class="btn btn-warning">See</button>
+            </a>
+{% endblock new_section %}
+

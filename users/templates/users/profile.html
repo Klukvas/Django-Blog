@@ -1,0 +1,28 @@
+{% extends 'blog/main.html' %}
+{% block main_section %}
+{% load crispy_forms_tags %}
+        <div class="form-section">
+            <h2>Profile user</h2>
+            <div class="media text-muted pt-3">
+                <img class="mr-2 rounded" style="width: 64px; height: 64px;"
+                        {% if user.profile.img.url %}
+                            src="{{ user.profile.img.url }}"
+                        {% else %}
+                            src="/pictures/default.jpg"
+                        {% endif %}
+                >
+                {#  Костыль, т.к. не работал в папке models.py параметр default, хоть и было прописано MEDIA_ROOT = os.path.join(BASE_DIR, 'pictures'), MEDIA_URL = '/pictures/' , в основном url.py: urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #}
+                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                <strong class="d-block text-gray-dark">@{{ user.username }}</strong>
+                <b>Email: </b> {{ user.email }}
+                </p>
+            </div>
+            <h3 class="mt-4">Change user data</h3>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ update_user|crispy }}
+                {{ img_profile }}
+                <button type="submit" class="btn btn-outline-warning">Update</button>
+            </form>
+        </div>
+{% endblock main_section %}

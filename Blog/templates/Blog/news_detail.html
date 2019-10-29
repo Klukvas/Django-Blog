@@ -1,0 +1,64 @@
+{% extends 'blog/main.html' %}
+{% block main_section %}
+
+    <div class="alert alert-light">
+        <a href="{% url 'blog-home' %}">Вернуться назад</a>
+        <h1>{{ object.title }}</h1>
+        <p>{{ object.text }}</p>
+        <div class="row">
+            <div>
+                <img {% if object.autor.profile.img.url %}
+                    src="{{ object.autor.profile.img.url }}"
+                {% else %}
+                    src="/pictures/default.jpg"
+                {% endif %}
+                    alt="{{ object.autor }}" class="user_image">
+            </div>
+            <div class="mt-2">
+                <span class="text-muted">Publicate: {{ object.date|date:'d E Y  H:i:s' }}</span>
+                {% if object.autor %}
+                    <p><b>Autor:
+                        <a href="{% url 'user-news' object.autor %}">{{ object.autor }}</a></b></p>
+                {% else %}
+                    <p><b>Autor:
+                        <mark>Admin</mark>
+                    </b></p>
+                {% endif %}
+            </div>
+        </div>
+        <hr>
+    {%  if object.autor == user %}
+        <a href="{% url 'news-update' object.id %}" class="btn btn-info"> Update post</a>
+        <a href="{% url 'news-delete' object.id %}" class="btn btn-danger"> Delete post</a>
+    {% endif %}
+    </div>
+
+{% endblock main_section %}
+
+
+{% block new_section %}
+    <h3><b>Бредогенератор: создаем тексты на любом языке с помощью нейронной сети</b></h3>
+    <img src="https://habrastorage.org/webt/vc/cy/we/vccywe4c6r0vbryvvx3qiale_j8.jpeg" class="img-thumbnail mb-1">
+    <p>Эта статья будет в немного «пятничном» формате, сегодня мы займемся NLP. Не
+        тем NLP, про который продают книжки в подземных переходах, а тем, который
+        Natural Language Processing — обработка естественных языков. В качестве примера
+        такой обработки будет использоваться генерация текста с помощью нейронной сети.
+        Создавать тексты мы сможем на любом языке, от русского или английского, до С++.
+        Результаты получаются весьма интересными, по картинке уже наверно можно
+        догадаться.
+    </p>
+    <a href="https://habr.com/ru/object/470035/" target="_blank">
+        <button class="btn btn-warning">See</button>
+    </a>
+
+    <h3><b>Двойной VPN в один клик. Как легко разделить IP-адрес точки входа и выхода</b></h3>
+    <img src="https://habrastorage.org/webt/gu/ux/_r/guux_rw3bw9b6_0h617yyow4xrq.png" class="img-thumbnail mb-1">
+    <p>В статье описывается самый простой способ настроить VPN-сервер, у
+        которого IP-адрес для подключения VPN-клиентов отличается от IP-адреса,
+        с которого клиенты выходят в интернет.
+    </p>
+    <a href="https://habr.com/ru/company/vdsina/blog/469879/" target="_blank">
+        <button class="btn btn-warning">See</button>
+    </a>
+{% endblock new_section %}
+

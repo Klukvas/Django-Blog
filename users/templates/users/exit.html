@@ -1,0 +1,13 @@
+{% extends 'blog/main.html' %}
+{% load crispy_forms_tags %}
+    {% block main_section %}
+        <div class="form-section">
+            <h2>Success log out</h2>
+            <a href="{% url 'user' %}">Login in again</a>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+
+            </form>
+        </div>
+    {% endblock main_section %}
