@@ -21,6 +21,9 @@ from django.contrib.auth import views as authvievs
 from django.conf import settings
 from django.conf.urls.static import static
 
+from Blog import views as blviews
+
+#https://webdevblog.ru/razrabotka-na-osnove-testov-django-restful-api/,,,,https://webdevblog.ru/sozdanie-django-api-ispolzuya-django-rest-framework-apiview/
 
 
 urlpatterns = [
@@ -40,7 +43,13 @@ urlpatterns = [
     path('password_reset/complete/',
          authvievs.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset/complete'),
+    path('like/', blviews.like_post, name='like_post' ),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    
 ]
+    
+   
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

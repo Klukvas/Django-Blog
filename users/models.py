@@ -9,9 +9,8 @@ class Profile(models.Model):
     def __srt__(self):
         return f'Profile of user  {self.user.username}'
 
-
-    def save(self):
-        super().save()
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
         image = Image.open(self.img.path)
 

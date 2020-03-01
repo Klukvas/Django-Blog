@@ -1,35 +1,52 @@
-{% extends 'blog/main.html' %}
+{% extends 'Blog/main.html' %}
 {% block main_section %}
 
     <div class="alert alert-light">
         <a href="{% url 'blog-home' %}">Вернуться назад</a>
-        <h1>{{ object.title }}</h1>
-        <p>{{ object.text }}</p>
+        <h1>{{ post.title }}</h1>
+
+        <p>{{ post.text|force_escape }}</p>
+
         <div class="row">
             <div>
-                <img {% if object.autor.profile.img.url %}
-                    src="{{ object.autor.profile.img.url }}"
+                <img {% if post.autor.profile.img.url %}
+                    src="{{ post.autor.profile.img.url }}"
                 {% else %}
                     src="/pictures/default.jpg"
                 {% endif %}
-                    alt="{{ object.autor }}" class="user_image">
+                    alt="{{ post.autor }}" class="user_image">
             </div>
             <div class="mt-2">
-                <span class="text-muted">Publicate: {{ object.date|date:'d E Y  H:i:s' }}</span>
-                {% if object.autor %}
+                <span class="text-muted">Publicate: {{ post.date|date:'d E Y  H:i:s' }}</span>
+                {% if post.autor %}
                     <p><b>Autor:
-                        <a href="{% url 'user-news' object.autor %}">{{ object.autor }}</a></b></p>
+                        <a href="{% url 'user-news' post.autor %}">{{ post.autor }}</a></b></p>
                 {% else %}
                     <p><b>Autor:
                         <mark>Admin</mark>
                     </b></p>
                 {% endif %}
+                {{ total_likes }} | Like{{ total_likes|pluralize }}
+                {% if user.is_authenticated %}
+
+
+                    <form action="{% url 'like_post' %}" method="post">
+                        {% csrf_token %}
+                        {% if is_liked %}
+                            <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-dislike btn-danger ">Disike</button>
+                            
+                        {% else %}
+                            <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-like btn-primary">Like</button>
+                        {% endif %}
+                    </form>
+                {% endif %}
+
             </div>
         </div>
         <hr>
-    {%  if object.autor == user %}
-        <a href="{% url 'news-update' object.id %}" class="btn btn-info"> Update post</a>
-        <a href="{% url 'news-delete' object.id %}" class="btn btn-danger"> Delete post</a>
+    {%  if post.autor == user %}
+        <a href="{% url 'news-update' post.id %}" class="btn btn-info"> Update post</a>
+        <a href="{% url 'news-delete' post.id %}" class="btn btn-danger"> Delete post</a>
     {% endif %}
     </div>
 
@@ -47,7 +64,7 @@
         Результаты получаются весьма интересными, по картинке уже наверно можно
         догадаться.
     </p>
-    <a href="https://habr.com/ru/object/470035/" target="_blank">
+    <a href="https://habr.com/ru/post/470035/" target="_blank">
         <button class="btn btn-warning">See</button>
     </a>
 
